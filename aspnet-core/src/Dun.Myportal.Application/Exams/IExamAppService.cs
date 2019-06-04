@@ -14,5 +14,9 @@ namespace Dun.Myportal.Exams
 
         IList<ExamQuestion> GetExamQuestions(GetExamQuestionInputDto input);
 
+        IList<ExamUserError> GetExamErrorQuestions(GetExamErrorInputDto input);
+
+        IList<GetExamUserErrorsCountOutputDto> GetExamUserErrorsCountByUserId(GetExamUserErrorsCountInputDto input);
+
     }
 }

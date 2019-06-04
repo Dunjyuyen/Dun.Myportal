@@ -4,10 +4,8 @@ using System.Text;
 
 namespace Dun.Myportal.Exams.Dto
 {
-    public class GetExamErrorInputDto
+    public class GetExamUserErrorsCountInputDto
     {
         public int UserId { get; set; }
-
-        public int GroupId { get; set; }
     }
 }

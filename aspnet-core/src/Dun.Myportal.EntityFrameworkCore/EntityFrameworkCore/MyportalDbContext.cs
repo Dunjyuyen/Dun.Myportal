@@ -18,5 +18,7 @@ namespace Dun.Myportal.EntityFrameworkCore
         public DbSet<ExamQuestion> ExamQuestions { get; set; } // 题目数据集合
         public DbSet<ExamType> ExamTypes { get; set; } // 题目类型数据集
         public DbSet<ExamUserError> ExamUserErrors { get; set; } // 题目类型数据集
+        public DbSet<ExamGroup> ExamGroup { get; set; } // 题目类型数据集
+        public DbSet<ExamLevel> ExamLevel { get; set; } // 题目类型数据集
     }
 }

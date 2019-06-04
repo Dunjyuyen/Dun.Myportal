@@ -21,7 +21,7 @@ namespace Dun.Myportal.Web.Host.Startup
 {
     public class Startup
     {
-        private const string _defaultCorsPolicyName = "localhost";
+        private const string _defaultCorsPolicyName = "120.79.247.188";
 
         private readonly IConfigurationRoot _appConfiguration;
 
