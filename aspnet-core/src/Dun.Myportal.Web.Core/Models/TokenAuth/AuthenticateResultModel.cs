@@ -1,7 +1,10 @@
-﻿namespace Dun.Myportal.Models.TokenAuth
+﻿using System;
+
+namespace Dun.Myportal.Models.TokenAuth
 {
     public class AuthenticateResultModel
     {
+        public Exception exception { get; set; }
         public string AccessToken { get; set; }
 
         public string EncryptedAccessToken { get; set; }

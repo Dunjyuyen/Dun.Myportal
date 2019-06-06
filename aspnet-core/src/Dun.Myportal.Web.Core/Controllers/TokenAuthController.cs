@@ -57,16 +57,32 @@ namespace Dun.Myportal.Controllers
                 model.Password,
                 GetTenancyNameOrNull()
             );
-
-            var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
-
-            return new AuthenticateResultModel
+            AuthenticateResultModel ret = null;
+            if (loginResult.Result==AbpLoginResultType.Success)
             {
-                AccessToken = accessToken,
-                EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
-                ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
-                UserId = loginResult.User.Id
-            };
+                var accessToken = CreateAccessToken(CreateJwtClaims(loginResult.Identity));
+                ret = new AuthenticateResultModel
+                {
+                    exception = null,
+                    AccessToken = accessToken,
+                    EncryptedAccessToken = GetEncrpyedAccessToken(accessToken),
+                    ExpireInSeconds = (int)_configuration.Expiration.TotalSeconds,
+                    UserId = loginResult.User.Id
+                };
+            }
+            else
+            {
+                ret = new AuthenticateResultModel
+                {
+                    exception = _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, model.UserNameOrEmailAddress, GetTenancyNameOrNull()),
+                    AccessToken = null,
+                    EncryptedAccessToken = null,
+                    ExpireInSeconds = 0,
+                    UserId = 0
+                };
+            }
+            
+            return ret;
         }
 
         [HttpGet]
@@ -188,8 +204,27 @@ namespace Dun.Myportal.Controllers
             {
                 case AbpLoginResultType.Success:
                     return loginResult;
+                case AbpLoginResultType.InvalidUserNameOrEmailAddress:
+                    return loginResult;
+                case AbpLoginResultType.InvalidPassword:
+                    return loginResult;
+                case AbpLoginResultType.UserIsNotActive:
+                    return loginResult;
+                case AbpLoginResultType.InvalidTenancyName:
+                    return loginResult;
+                case AbpLoginResultType.TenantIsNotActive:
+                    return loginResult;
+                case AbpLoginResultType.UserEmailIsNotConfirmed:
+                    return loginResult;
+                case AbpLoginResultType.UnknownExternalLogin:
+                    return loginResult;
+                case AbpLoginResultType.LockedOut:
+                    return loginResult;
+                case AbpLoginResultType.UserPhoneNumberIsNotConfirmed:
+                    return loginResult;
                 default:
-                    throw _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
+                    Exception e = _abpLoginResultTypeHelper.CreateExceptionForFailedLoginAttempt(loginResult.Result, usernameOrEmailAddress, tenancyName);
+                    throw e;
             }
         }
 
